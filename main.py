@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 
 date=datetime.now()+timedelta(days=1)
 date=date.strftime("%Y%m%d")
-time_list=[1,4,7,10,13,16,19,22]
+time_list=[10,13,16,19,22]
 
 for time in time_list:
     print(date,time)
