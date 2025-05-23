@@ -1,0 +1,38 @@
+name: Run Script Daily
+
+on:
+  schedule:
+    - cron: "0 18 * * *"  # Runs every day at 10:00 UTC
+  workflow_dispatch:  # Allows manual triggering
+
+permissions:
+  contents: write
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Use a stable version
+
+      - name: Install dependencies
+        run: |
+          pip install opencv-python requests
+
+      - name: Run the script
+        run: python main.py  # Replace with your script filename
+
+      - name: Commit & Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .  # Change this if modifying another file
+          git commit -m "Automated update from GitHub Actions" || echo "No changes to commit"
+          git push origin main
